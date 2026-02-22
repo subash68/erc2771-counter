@@ -16,5 +16,7 @@ docs/
 .vscode/
 .github/
 
+bin/
+broadcast/
 
 lib/
