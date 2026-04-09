@@ -37,7 +37,7 @@ contract UpgradeableCustomERC20 is
     function initialize(address forwarder, address owner_) public initializer {
         require(forwarder != address(0), "forwarder=0");
         require(owner_ != address(0), "owner=0");
-        __ERC20_init("USDC", "USDC");
+        __ERC20_init("USDC", "USDC"); // OUSD - OUSD
         __ERC20Burnable_init();
         __ERC20Pausable_init();
         __AccessControl_init();

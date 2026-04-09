@@ -20,3 +20,5 @@ bin/
 broadcast/
 
 lib/
+
+*/.DS_Store

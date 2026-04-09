@@ -32,22 +32,52 @@ forge script script/UpgradeableCustomERC20ProxyFactory.s.sol:UpgradeableCustomER
     --etherscan-api-key $ETHERSCAN_API_KEY \
     --verify
 
+forge script script/ERC20.s.sol:CustomTokenScript --rpc-url $RPC_URL \
+    --private-key $PRIVATE_KEY \
+    --broadcast \
+    --etherscan-api-key $ETHERSCAN_API_KEY \
+    --verify
+
+
 # Send deploy transaction
 
-cast send 0x4E44238A07Fd8306258523e02cEE0697D043fb54 \
-    "deploy(address)" 0xd0593c130b235e88F74f8e2B5A7D5B7060de5DA4 \
+
+# preflight check and perform deployment (proxy if not exist)
+
+cast send $PROXY_FACTORY \
+    "deploy(address)" $DEPLOYED_FORWARDER \
     --private-key $PRIVATE_KEY \
     --rpc-url $RPC_URL
 
+ 
+
+cast send $PROXY \
+    "mint(address,uint256)" $DISTRIBUTOR_A 1000000000000000000000000 \
+    --private-key $PRIVATE_KEY \
+    --rpc-url $RPC_URL
+
+cast send $PROXY \
+    "transfer(address,uint256)" $TOKEN_HOLDER  10000000000000000001\
+    --private-key $DISTRIBUTOR_A_PK \
+    --rpc-url $RPC_URL
+
+
 
 # Non-critical - use only for cleaning and debugging
-forge verify-contract 0x7EA8e772cB6c33695ab3854BF45A3b364314245A \
+forge verify-contract 0x10979962e6d2a5688807E41169D62967f15C6d65 \
 src/UpgradeableCustomERC20.sol:UpgradeableCustomERC20 \
 --etherscan-api-key $ETHERSCAN_API_KEY \
 --chain 80002
 
+## --constructor-args 0x287f0B854a2Ba9Dc3E8572c68bDabD949819F119
+
+forge verify-contract 0x5b261a8662f433fe7320acD470C8B2893F1e1ce8 \
+src/ERC20.sol:CustomToken \
+--etherscan-api-key $ETHERSCAN_API_KEY \
+--chain 80002
+
 forge verify-contract \
-  0x4E44238A07Fd8306258523e02cEE0697D043fb54 \
+  0x21CD2Be48C05766933b76FA60fCbDf974B4B9A3F \
   src/UpgradeableCustomERC20ProxyFactory.sol:UpgradeableCustomERC20ProxyFactory \
   --chain-id 80002 \
   --watch \
@@ -55,14 +85,17 @@ forge verify-contract \
 
 # Test commands for proxy 
 
-cast call 0x1D586091047cc27413a34387ed86fe84572aF197 "name()(string)" --rpc-url $RPC_URL
-cast call 0x1D586091047cc27413a34387ed86fe84572aF197 "symbol()(string)" --rpc-url $RPC_URL
-cast call 0x1D586091047cc27413a34387ed86fe84572aF197 "decimals()(uint8)" --rpc-url $RPC_URL
-cast call 0x1D586091047cc27413a34387ed86fe84572aF197 "totalSupply()(uint256)" --rpc-url $RPC_URL
+cast call 0x054c5f1267f3ee2f89545CF4087f82C7e637224b "name()(string)" --rpc-url $RPC_URL
+cast call 0x054c5f1267f3ee2f89545CF4087f82C7e637224b "symbol()(string)" --rpc-url $RPC_URL
+cast call 0x054c5f1267f3ee2f89545CF4087f82C7e637224b "decimals()(uint8)" --rpc-url $RPC_URL
+cast call 0x054c5f1267f3ee2f89545CF4087f82C7e637224b "totalSupply()(uint256)" --rpc-url $RPC_URL
 
 # proxy from anvil 0x75537828f2ce51be7289709686a69cbfdbb714f1
 
 # receiver 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-
-
 ## 0x287f0B854a2Ba9Dc3E8572c68bDabD949819F119
+
+
+#####################
+
+##

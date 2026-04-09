@@ -22,24 +22,24 @@ contract UpgradeableCustomERC20Script is Script {
         UpgradeableCustomERC20 impl = new UpgradeableCustomERC20();
 
         ProxyAdmin proxyAdmin = new ProxyAdmin(owner);
-        bytes memory initData = abi.encodeCall(
-            UpgradeableCustomERC20.initialize,
-            (deployedForwarder)
-        );
+        // bytes memory initData = abi.encodeCall(
+        //     UpgradeableCustomERC20.initialize,
+        //     (deployedForwarder)
+        // );
 
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(impl),
-            address(proxyAdmin),
-            initData
-        );
+        // TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
+        //     address(impl),
+        //     address(proxyAdmin),
+        //     initData
+        // );
 
-        UpgradeableCustomERC20 token = UpgradeableCustomERC20(address(proxy));
+        // UpgradeableCustomERC20 token = UpgradeableCustomERC20(address(proxy));
 
         vm.stopBroadcast();
 
-        console2.log("Implementation:", address(impl));
-        console2.log("ProxyAdmin:", address(proxyAdmin));
-        console2.log("Proxy:", address(proxy));
-        console2.log("Token via proxy:", address(token));
+        // console2.log("Implementation:", address(impl));
+        // console2.log("ProxyAdmin:", address(proxyAdmin));
+        // console2.log("Proxy:", address(proxy));
+        // console2.log("Token via proxy:", address(token));
     }
 }
